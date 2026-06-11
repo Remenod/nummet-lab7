@@ -17,11 +17,7 @@
     </header>
 
     <main class="workspace">
-      <section class="panel controls" aria-label="Calculation settings">
-        <label>
-          <span>Variant</span>
-          <select id="variantSelect"></select>
-        </label>
+      <section class="panel controls controls-v9" aria-label="Calculation settings">
         <label>
           <span>Corrector iterations</span>
           <input id="iterationInput" type="number" min="1" max="6" step="1" value="1">
@@ -30,7 +26,13 @@
           <input id="markersToggle" type="checkbox" checked>
           <span>Node markers</span>
         </label>
+        <label class="toggle">
+          <input id="syncZoomToggle" type="checkbox" checked>
+          <span>Sync zoom</span>
+        </label>
         <div class="actions">
+          <button id="boxZoomToggle" type="button" aria-pressed="false">Box Zoom</button>
+          <button id="resetZoomButton" type="button">Reset</button>
           <button id="csvButton" type="button">CSV</button>
           <button id="jsonButton" type="button">JSON</button>
         </div>
@@ -82,7 +84,10 @@
             <h2>Limit Step</h2>
             <p id="baseChartMeta">—</p>
           </div>
-          <canvas id="baseChart" height="360"></canvas>
+          <div class="chart-shell">
+            <canvas id="baseChart" height="360"></canvas>
+            <div class="tooltip" id="baseTooltip" hidden></div>
+          </div>
           <div class="legend" id="baseLegend"></div>
         </article>
         <article class="panel chart-panel">
@@ -90,8 +95,55 @@
             <h2>Doubled Step</h2>
             <p id="doubleChartMeta">—</p>
           </div>
-          <canvas id="doubleChart" height="360"></canvas>
+          <div class="chart-shell">
+            <canvas id="doubleChart" height="360"></canvas>
+            <div class="tooltip" id="doubleTooltip" hidden></div>
+          </div>
           <div class="legend" id="doubleLegend"></div>
+        </article>
+      </section>
+
+      <section class="panel compare-panel" aria-label="Chart comparison">
+        <article>
+          <div class="section-head compact-head">
+            <h2>Live Compare</h2>
+            <p id="liveCompareTitle">—</p>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Series</th>
+                  <th>y</th>
+                  <th>|e|</th>
+                  <th>|y-p|</th>
+                </tr>
+              </thead>
+              <tbody id="liveCompareBody"></tbody>
+            </table>
+          </div>
+        </article>
+        <article>
+          <div class="section-head compact-head">
+            <h2>Pinned Compare</h2>
+            <p id="pinnedCompareTitle">—</p>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Series</th>
+                  <th>y</th>
+                  <th>|e|</th>
+                  <th>|y-p|</th>
+                </tr>
+              </thead>
+              <tbody id="pinnedCompareBody"></tbody>
+            </table>
+          </div>
+          <div class="sub-actions">
+            <button id="clearPinButton" type="button">Clear Pin</button>
+          </div>
         </article>
       </section>
 
@@ -142,6 +194,9 @@
       </section>
     </main>
 
+    <script src="math.js"></script>
+    <script src="charts.js"></script>
+    <script src="ui.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

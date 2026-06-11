@@ -112,6 +112,10 @@ h2 {
   padding: 16px;
 }
 
+.controls-v9 {
+  grid-template-columns: minmax(160px, 1fr) auto auto minmax(360px, 2fr);
+}
+
 label {
   display: grid;
   gap: 6px;
@@ -152,6 +156,7 @@ input[type="number"] {
   display: grid;
   grid-auto-flow: column;
   gap: 8px;
+  justify-content: end;
 }
 
 button {
@@ -167,6 +172,11 @@ button {
   cursor: pointer;
   line-height: 1;
   text-align: center;
+}
+
+button.is-active {
+  background: var(--teal);
+  border-color: var(--teal);
 }
 
 button:hover,
@@ -243,6 +253,21 @@ button:focus-visible {
   padding: 16px;
 }
 
+.compare-panel {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding: 16px;
+}
+
+.compare-panel article {
+  min-width: 0;
+}
+
+.compare-panel table {
+  min-width: 0;
+}
+
 .section-head {
   display: flex;
   justify-content: space-between;
@@ -257,6 +282,14 @@ button:focus-visible {
   text-align: right;
 }
 
+.compact-head {
+  margin-bottom: 6px;
+}
+
+.chart-shell {
+  position: relative;
+}
+
 canvas {
   display: block;
   width: 100%;
@@ -264,6 +297,37 @@ canvas {
   border: 1px solid var(--line);
   border-radius: 6px;
   background: #fff;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+canvas:active {
+  cursor: grabbing;
+}
+
+.tooltip {
+  position: absolute;
+  z-index: 5;
+  display: grid;
+  gap: 5px;
+  max-width: min(320px, calc(100% - 24px));
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+  font-size: 0.82rem;
+  pointer-events: none;
+}
+
+.tooltip[hidden] {
+  display: none;
+}
+
+.tooltip strong {
+  color: var(--ink);
 }
 
 .legend {
@@ -324,6 +388,21 @@ tbody tr:hover {
   background: #f0f5f4;
 }
 
+.swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 8px;
+  border-radius: 50%;
+  vertical-align: -1px;
+}
+
+.sub-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
 @media (max-width: 980px) {
   .topbar,
   .section-head {
@@ -338,7 +417,8 @@ tbody tr:hover {
   .controls,
   .overview,
   .details,
-  .chart-grid {
+  .chart-grid,
+  .compare-panel {
     grid-template-columns: 1fr;
   }
 
@@ -354,6 +434,7 @@ tbody tr:hover {
 
   .actions {
     grid-auto-flow: row;
+    justify-content: stretch;
   }
 
   button {

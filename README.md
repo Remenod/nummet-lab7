@@ -1,12 +1,20 @@
 # Laboratory Work No. 7
 
-Static app for solving the Cauchy problem with multistep predictor-corrector methods:
+Static app for solving variant 9 of the Cauchy problem with the Adams-Bashforth-Moulton predictor-corrector method:
 
-- Adams-Bashforth-Moulton;
-- Milne-Simpson;
-- Hamming.
+- `y' = 2t y²`;
+- `y(0) = 1`;
+- interval `[0, 0.9]`;
+- exact solution `y(t) = 1 / (1 - t²)`.
 
-The site is implemented with vanilla `HTML/CSS/JS`, with no build step and no external dependencies. Variant 9 opens by default, but the interface supports all 20 variants from the lab assignment.
+The site is implemented with vanilla `HTML/CSS/JS`, with no build step and no external dependencies. Charts support wheel zoom, pan, box zoom, synced zoom, hover comparison, pinned comparison, and CSV/JSON export.
+
+## File Structure
+
+- `math.js` contains the variant 9 equation, exact solution, RK4 bootstrap, stability step calculation, and Adams-Bashforth-Moulton solver.
+- `charts.js` contains canvas rendering, zoom, pan, box zoom, hover comparison, and pinned comparison logic.
+- `ui.js` contains page rendering, tables, summary metrics, and CSV/JSON export.
+- `app.js` starts the application.
 
 ## Local Run
 
