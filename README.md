@@ -6,7 +6,7 @@ Static app for solving the Cauchy problem with multistep predictor-corrector met
 - Milne-Simpson;
 - Hamming.
 
-The site is implemented with vanilla `HTML/CSS/JS`, with no build step and no external dependencies. Variant 13 opens by default, but the interface supports all 20 variants from the lab assignment.
+The site is implemented with vanilla `HTML/CSS/JS`, with no build step and no external dependencies. Variant 9 opens by default, but the interface supports all 20 variants from the lab assignment.
 
 ## Local Run
 

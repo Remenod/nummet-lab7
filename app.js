@@ -285,7 +285,7 @@ function setupControls() {
     option.textContent = `Variant ${variant.id}: ${METHOD_LABELS[variant.method]} — ${variant.equation}`;
     select.append(option);
   }
-  select.value = "13";
+  select.value = "9";
 
   select.addEventListener("change", render);
   document.querySelector("#iterationInput").addEventListener("input", render);
@@ -298,7 +298,7 @@ function setupControls() {
 function render() {
   const variantId = Number(document.querySelector("#variantSelect").value);
   const iterations = Math.max(1, Math.min(6, Number(document.querySelector("#iterationInput").value) || 1));
-  const variant = VARIANTS.find((item) => item.id === variantId) || VARIANTS[12];
+  const variant = VARIANTS.find((item) => item.id === variantId) || VARIANTS[8];
   state.results = computeAll(variant, iterations);
 
   renderSummary(state.results);
