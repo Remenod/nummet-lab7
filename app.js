@@ -16,6 +16,7 @@ const CONTROLLER_COEFFICIENTS = {
   hamming: 9 / 121,
 };
 
+// Shared equation templates from the lab table; each variant below points to one of them.
 const VARIANT_PATTERNS = {
   polyMinusY: {
     equation: "y' = t² - y, y(0) = 1",
@@ -103,6 +104,7 @@ function makeVariant(id, method, patternKey) {
   };
 }
 
+// RK4 is used only to bootstrap the first three nodes required by multistep methods.
 function rk4Step(f, t, y, h) {
   const k1 = f(t, y);
   const k2 = f(t + h / 2, y + (h * k1) / 2);
@@ -125,6 +127,7 @@ function estimateMaxFy(variant) {
   return maxValue || 1;
 }
 
+// Stability rule from the lab: h is bounded by methodConstant / max |df/dy|.
 function makeStepPlan(variant) {
   const maxFy = estimateMaxFy(variant);
   const hLimit = METHOD_LIMITS[variant.method] / maxFy;
@@ -141,6 +144,7 @@ function makeStepPlan(variant) {
   };
 }
 
+// Predictor formulas: Adams has its own form, while Milne and Hamming share the same predictor.
 function predictor(method, h, y, f, k) {
   if (method === "adams") {
     return y[k] + (h / 24) * (-9 * f[k - 3] + 37 * f[k - 2] - 59 * f[k - 1] + 55 * f[k]);
@@ -148,6 +152,7 @@ function predictor(method, h, y, f, k) {
   return y[k - 3] + (4 * h / 3) * (2 * f[k - 2] - f[k - 1] + 2 * f[k]);
 }
 
+// Corrector formulas use the predicted or controller-adjusted value at t_{k+1}.
 function corrector(method, variant, h, tNext, driver, y, f, k) {
   const fNext = variant.f(tNext, driver);
   if (method === "adams") {
@@ -173,11 +178,13 @@ function solveCase(variant, options) {
   y[0] = variant.y0;
   fValues[0] = variant.f(t[0], y[0]);
 
+  // Multistep formulas need four known points, so y1..y3 are generated first.
   for (let i = 1; i <= Math.min(3, n); i += 1) {
     y[i] = rk4Step(variant.f, t[i - 1], y[i - 1], h);
     fValues[i] = variant.f(t[i], y[i]);
   }
 
+  // From the fourth point onward, each step is predictor -> optional controller -> corrector.
   for (let k = 3; k < n; k += 1) {
     const tNext = t[k + 1];
     const pNext = predictor(variant.method, h, y, fValues, k);
@@ -185,6 +192,7 @@ function solveCase(variant, options) {
     let driver = controlled ? pNext + CONTROLLER_COEFFICIENTS[variant.method] * previousGap : pNext;
     let yNext = corrector(variant.method, variant, h, tNext, driver, y, fValues, k);
 
+    // Extra corrector passes show how repeated correction changes the result.
     for (let pass = 1; pass < iterations; pass += 1) {
       yNext = corrector(variant.method, variant, h, tNext, yNext, y, fValues, k);
     }
@@ -195,6 +203,7 @@ function solveCase(variant, options) {
     gaps[k + 1] = Math.abs(yNext - pNext);
   }
 
+  // Exact values are kept separately so the UI can report final and maximum errors.
   for (let i = 0; i <= n; i += 1) {
     exact[i] = variant.exact(t[i]);
     if (Number.isFinite(exact[i]) && Number.isFinite(y[i])) {
@@ -232,6 +241,7 @@ function solveCase(variant, options) {
 
 function computeAll(variant, iterations) {
   const plan = makeStepPlan(variant);
+  // The four required lab cases: limit step and doubled step, each with and without control.
   const cases = [
     solveCase(variant, {
       n: plan.baseN,
@@ -442,6 +452,7 @@ function drawChart(canvas, datasets, showMarkers) {
   const xScale = (value) => pad.left + ((value - xMin) / (xMax - xMin || 1)) * plotWidth;
   const yScale = (value) => pad.top + (1 - (value - yMin) / (yMax - yMin || 1)) * plotHeight;
 
+  // The chart is dependency-free canvas drawing, so GitHub Pages can host it as plain static files.
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, width, height);
   drawGrid(ctx, width, height, pad, xMin, xMax, yMin, yMax, xScale, yScale);
@@ -531,6 +542,7 @@ function download(type) {
     blob = new Blob([JSON.stringify(state.results, stripFunctions, 2)], { type: "application/json" });
     filename = `lab7-variant-${variant.id}.json`;
   } else {
+    // CSV export mirrors the report table and includes every node for manual checking.
     const lines = ["variant,method,case,N,h,i,t,p,y,exact,error,gap"];
     for (const item of cases) {
       item.t.forEach((t, i) => {
