@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lab 7 — multistep methods</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Numerical methods</p>
+        <h1>Laboratory Work No. 7</h1>
+        <p class="subtitle">Multistep predictor-corrector methods for the Cauchy problem</p>
+      </div>
+      <div class="status" id="statusText">Ready</div>
+    </header>
+
+    <main class="workspace">
+      <section class="panel controls" aria-label="Calculation settings">
+        <label>
+          <span>Variant</span>
+          <select id="variantSelect"></select>
+        </label>
+        <label>
+          <span>Corrector iterations</span>
+          <input id="iterationInput" type="number" min="1" max="6" step="1" value="1">
+        </label>
+        <label class="toggle">
+          <input id="markersToggle" type="checkbox" checked>
+          <span>Node markers</span>
+        </label>
+        <div class="actions">
+          <button id="csvButton" type="button">CSV</button>
+          <button id="jsonButton" type="button">JSON</button>
+        </div>
+      </section>
+
+      <section class="overview" aria-label="Summary">
+        <article class="metric">
+          <span>Method</span>
+          <strong id="methodMetric">—</strong>
+        </article>
+        <article class="metric">
+          <span>Limit step</span>
+          <strong id="limitMetric">—</strong>
+        </article>
+        <article class="metric">
+          <span>Step a/b</span>
+          <strong id="stepsMetric">—</strong>
+        </article>
+        <article class="metric">
+          <span>Best case</span>
+          <strong id="bestMetric">—</strong>
+        </article>
+      </section>
+
+      <section class="panel details" aria-label="Variant data">
+        <div>
+          <h2 id="variantTitle">—</h2>
+          <p id="variantFormula">—</p>
+        </div>
+        <div class="formula-grid">
+          <div>
+            <span>Exact solution</span>
+            <strong id="exactFormula">—</strong>
+          </div>
+          <div>
+            <span>Interval</span>
+            <strong id="intervalText">—</strong>
+          </div>
+          <div>
+            <span>Stability</span>
+            <strong id="stabilityText">—</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="chart-grid" aria-label="Charts">
+        <article class="panel chart-panel">
+          <div class="section-head">
+            <h2>Limit Step</h2>
+            <p id="baseChartMeta">—</p>
+          </div>
+          <canvas id="baseChart" height="360"></canvas>
+          <div class="legend" id="baseLegend"></div>
+        </article>
+        <article class="panel chart-panel">
+          <div class="section-head">
+            <h2>Doubled Step</h2>
+            <p id="doubleChartMeta">—</p>
+          </div>
+          <canvas id="doubleChart" height="360"></canvas>
+          <div class="legend" id="doubleLegend"></div>
+        </article>
+      </section>
+
+      <section class="panel table-panel" aria-label="Case comparison">
+        <div class="section-head">
+          <h2>Errors</h2>
+          <p id="tableMeta">—</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Case</th>
+                <th>N</th>
+                <th>h</th>
+                <th>y(b)</th>
+                <th>Exact y(b)</th>
+                <th>|e(b)|</th>
+                <th>max |e|</th>
+                <th>max |y-p|</th>
+              </tr>
+            </thead>
+            <tbody id="metricsBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel table-panel" aria-label="Node values">
+        <div class="section-head">
+          <h2>Active Variant Nodes</h2>
+          <p>Shows the controlled case with the limit step</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>i</th>
+                <th>t</th>
+                <th>p</th>
+                <th>y</th>
+                <th>exact y</th>
+                <th>|e|</th>
+              </tr>
+            </thead>
+            <tbody id="nodesBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
